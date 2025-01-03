@@ -266,12 +266,61 @@ struct TwoBandLinkwitzRileyFilter
             delete[] filters;
         }
         
+        if (high_states_1)
+        {
+            delete[] high_states_1;
+        }
+        
+        if (high_states_2)
+        {
+            delete[] high_states_2;
+        }
+        
+        if (low_states_1)
+        {
+            delete[] low_states_1;
+        }
+        
+        if (low_states_2)
+        {
+            delete[] low_states_2;
+        }
+        
+        if (outputSamples)
+        {
+            delete[] outputSamples;
+        }
+        
+        if (low_outputs)
+        {
+            delete[] low_outputs;
+        }
+        
+        if (dist_lows)
+        {
+            delete[] dist_lows;
+        }
+        
+        if (high_outputs)
+        {
+            delete[] high_outputs;
+        }
+
         
         inBuffer =  NULL;
         outBuffer =  NULL;
         highBand =  NULL;
         lowBand =  NULL;
         filters = NULL;
+        high_states_1 = NULL;
+        high_states_2 = NULL;
+        low_states_1 = NULL;
+        low_states_2 = NULL;
+        outputSamples =  NULL;
+        low_outputs =  NULL;
+        high_outputs =  NULL;
+        dist_lows =  NULL;
+
     }
 
     void _ReAllocInternalBuffers(int a_nNewMaxChannels)

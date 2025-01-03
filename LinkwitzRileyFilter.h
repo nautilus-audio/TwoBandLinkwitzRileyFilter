@@ -117,24 +117,19 @@ struct TwoBandLinkwitzRileyFilter
     void SetCrossoverFrequency(float a_nCrossoverFreq)
     {
         f_crossover = a_nCrossoverFreq;
+        
+        for(int channel = 0; channel < _nMaxChannels; channel++)
+        {
+            filters[channel].hpfLRCoeffs(f_crossover, fs);
+            filters[channel].lpfLRCoeffs(f_crossover, fs);
+        }
     }
     
-    //RRS: Memory allocations are allowed inside
     void SetMaxChannels(int a_nMaxChannels)
     {
         if (_nMaxChannels != a_nMaxChannels)
             _ReAllocInternalBuffers(a_nMaxChannels);
-
-        filters = (Filter*) malloc(a_nMaxChannels * sizeof(Filter));
-
-        high_states_1 = (float*) malloc(_nMaxChannels);
-        high_states_2 = (float*) malloc(_nMaxChannels);
-        low_states_1 = (float *) malloc(_nMaxChannels);
-        low_states_2 = (float *) malloc(_nMaxChannels);
-        outputSamples = (float *) malloc(_nMaxChannels);
-        low_outputs = (float *) malloc(_nMaxChannels);
-        high_outputs = (float *) malloc(_nMaxChannels);
-        dist_lows = (float *) malloc(_nMaxChannels);
+        
     }
 
     //RRS: Sample rate is not constant, so you have to reinitialize your sample rate dependent params (such as filters coeffs) on this call from our framework
@@ -245,9 +240,6 @@ struct TwoBandLinkwitzRileyFilter
 
             delete[] outBuffer;
         }
-
-        inBuffer =  NULL;
-        outBuffer =  NULL;
         
         if (highBand)
         {
@@ -268,9 +260,18 @@ struct TwoBandLinkwitzRileyFilter
 
             delete[] lowBand;
         }
-
+        
+        if(filters)
+        {
+            delete[] filters;
+        }
+        
+        
+        inBuffer =  NULL;
+        outBuffer =  NULL;
         highBand =  NULL;
         lowBand =  NULL;
+        filters = NULL;
     }
 
     void _ReAllocInternalBuffers(int a_nNewMaxChannels)
@@ -281,6 +282,16 @@ struct TwoBandLinkwitzRileyFilter
         outBuffer = new float*[_nMaxChannels = a_nNewMaxChannels];
         highBand = new float*[_nMaxChannels = a_nNewMaxChannels];
         lowBand = new float*[_nMaxChannels = a_nNewMaxChannels];
+        filters = (Filter*) malloc(_nMaxChannels * sizeof(Filter));
+
+        high_states_1 = (float *) malloc(_nMaxChannels);
+        high_states_2 = (float *) malloc(_nMaxChannels);
+        low_states_1 = (float *) malloc(_nMaxChannels);
+        low_states_2 = (float *) malloc(_nMaxChannels);
+        outputSamples = (float *) malloc(_nMaxChannels);
+        low_outputs = (float *) malloc(_nMaxChannels);
+        high_outputs = (float *) malloc(_nMaxChannels);
+        dist_lows = (float *) malloc(_nMaxChannels);
         
         for (int n = 0; n < _nMaxChannels; ++n)
         {

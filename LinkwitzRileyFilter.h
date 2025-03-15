@@ -101,9 +101,9 @@ struct TwoBandLinkwitzRileyFilter
         high_outputs =  NULL;
         dist_lows =  NULL;
         
-    } //RRS: All initializations needed for your DSP, memory allocations are allowed inside
+    } // All initializations needed for your DSP, memory allocations are allowed inside
 
-    //RRS: Memory allocations are allowed inside
+    // Memory allocations are allowed inside
     void SetMaxBlockSize(int a_nMaxBlockSize)
     {
         if (_nMaxBlockSize != a_nMaxBlockSize)
@@ -132,7 +132,7 @@ struct TwoBandLinkwitzRileyFilter
         
     }
 
-    //RRS: Sample rate is not constant, so you have to reinitialize your sample rate dependent params (such as filters coeffs) on this call from our framework
+    // Sample rate is not constant, so you have to reinitialize your sample rate dependent params (such as filters coeffs) on this call from our framework
     void SetSampleRate(float a_fSampleRate_Hz) {
         fs = a_fSampleRate_Hz;
         
@@ -141,14 +141,14 @@ struct TwoBandLinkwitzRileyFilter
             filters[channel].hpfLRCoeffs(f_crossover, fs);
             filters[channel].lpfLRCoeffs(f_crossover, fs);
         }
-    } //RRS: Memory allocations are allowed inside
+    } // Memory allocations are allowed inside
 
-    void SetGain(float a_fGain_01) { _fGain_01 = a_fGain_01; } //RRS: Assertion: No memory allocations are allowed inside!
-    void SetSomeParam1(float a_fSomeParam1Value) {} //RRS: Assertion: No memory allocations are allowed inside!
-    void SetSomeParam2(float a_fSomeParam2Value) {} //RRS: Assertion: No memory allocations are allowed inside!
+    void SetGain(float a_fGain_01) { _fGain_01 = a_fGain_01; } // Assertion: No memory allocations are allowed inside!
+    void SetSomeParam1(float a_fSomeParam1Value) {} // Assertion: No memory allocations are allowed inside!
+    void SetSomeParam2(float a_fSomeParam2Value) {} // Assertion: No memory allocations are allowed inside!
         
     void Release() { _ReleaseInternalBuffers();
-        //RRS: All previously allocated memory can be deallocated here
+        // All previously allocated memory can be deallocated here
     }
     
     float ProcessSampleLow(float* readData, Filter channelFilter, int channel, int index){
@@ -188,14 +188,14 @@ struct TwoBandLinkwitzRileyFilter
     }
         
         
-    //RRS: Assertion: No memory allocations are allowed inside!
+    // Assertion: No memory allocations are allowed inside!
     void Process(float** a_vAudioBlocksInPlace, int a_nChannels, int a_nSampleCount)
     {
-        //RRS: Assertion: a_nChannels less or equal _nMaxChannels set in SetMaxChannels()
-        //RRS: Assertion: a_nSampleCount less or equal _nMaxBlockSize set in SetMaxBlockSize()
+        // Assertion: a_nChannels less or equal _nMaxChannels set in SetMaxChannels()
+        // Assertion: a_nSampleCount less or equal _nMaxBlockSize set in SetMaxBlockSize()
         
-        //RRS: Here we copy the input audio data into internal buffers, apply Gain and then copy the processed data back to the input buffers (in-place).
-        //RRS: There is no need for this copy operation (and these internal buffers): it's just a demonstration of how to work with the internal buffers if you need them.
+        // Here we copy the input audio data into internal buffers, apply Gain and then copy the processed data back to the input buffers (in-place).
+        // There is no need for this copy operation (and these internal buffers): it's just a demonstration of how to work with the internal buffers if you need them.
 
         
         for (int channel = 0; channel < a_nChannels; ++channel)
